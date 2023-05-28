@@ -3,18 +3,15 @@
 #define STRING_VIEW_IMPLEMENTATION
 #include "string_view.h"
 
-bool is_not_space(int ch) { return !(isspace(ch)); }
+bool is_not_period(int ch) { return ch != '.'; }
 
 int main(int argc, char *argv[]) {
-  String_view sv = Sv_make("Hello, World");
+  String_view sv = Sv_make("file.ext");
 
-  const char *cstr = Sv_to_cstr(sv);
-
-  printf("cstr from sv = %s\n", cstr);
+  String_view sv2 = Sv_pop_back_while(&sv, is_not_period);
 
   printf("sv = " Sv_fmt "\n", Sv_arg(sv));
-  printf("sv = " Sv_fmt "\n", Sv_arg(sv));
-  printf("sv = " Sv_fmt "\n", Sv_arg(sv));
+  printf("sv2 = " Sv_fmt "\n", Sv_arg(sv2));
 
   return 0;
 }
