@@ -19,6 +19,7 @@ bool Sv_ends_with(const char *str, String_view sv);
 String_view Sv_pop_front(String_view *sv, size_t size);
 String_view Sv_pop_back(String_view *sv, size_t size);
 String_view Sv_pop_front_while(String_view *sv, bool (*condition)(int));
+const char *Sv_to_cstr(String_view sv);
 //////////////////////////////////////////////////
 #ifdef STRING_VIEW_IMPLEMENTATION
 String_view Sv_make(const char *cstr) {
@@ -86,6 +87,15 @@ String_view Sv_pop_front_while(String_view *sv, bool (*condition)(int)) {
   sv->len -= i;
 
   return popped;
+}
+const char *Sv_to_cstr(String_view sv) {
+  char *cstr = (char *)calloc(sv.len, sizeof(char));
+
+  memcpy(cstr, sv.data, sv.len);
+
+  cstr[sv.len] = '\0';
+
+  return cstr;
 }
 #endif
 

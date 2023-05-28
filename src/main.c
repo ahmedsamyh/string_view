@@ -8,8 +8,12 @@ bool is_not_space(int ch) { return !(isspace(ch)); }
 int main(int argc, char *argv[]) {
   String_view sv = Sv_make("Hello, World");
 
-  String_view sv2 = Sv_pop_front_while(&sv, is_not_space);
+  const char *cstr = Sv_to_cstr(sv);
 
+  printf("cstr from sv = %s\n", cstr);
+
+  printf("sv = " Sv_fmt "\n", Sv_arg(sv));
+  printf("sv = " Sv_fmt "\n", Sv_arg(sv));
   printf("sv = " Sv_fmt "\n", Sv_arg(sv));
 
   return 0;
