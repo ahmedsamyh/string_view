@@ -1,6 +1,7 @@
 #ifndef _STRING_VIEW_H_
 #define _STRING_VIEW_H_
 
+#include <assert.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
@@ -16,8 +17,8 @@ typedef struct {
   (String_view) { .data = cstr, .len = strlen(cstr) }
 
 String_view Sv_make(const char *cstr);
-bool Sv_starts_with(const char *str, String_view sv);
-bool Sv_ends_with(const char *str, String_view sv);
+bool Sv_starts_with(String_view sv, const char *str);
+bool Sv_ends_with(String_view sv, const char *str);
 String_view Sv_pop_front(String_view *sv, size_t size);
 String_view Sv_pop_back(String_view *sv, size_t size);
 String_view Sv_pop_front_while(String_view *sv, bool (*condition)(int));
@@ -31,27 +32,19 @@ String_view Sv_make(const char *cstr) {
   sv.data = cstr;
   return sv;
 }
-bool Sv_starts_with(const char *str, String_view sv) {
+bool Sv_starts_with(String_view sv, const char *str) {
   if (sv.len < strlen(str))
     return false;
-
-  for (size_t i = 0; i < strlen(str); ++i) {
-    if (str[i] != sv.data[i]) {
-      return false;
-    }
-  }
-  return true;
+  assert(sv.len >= strlen(str));
+  String_view sv_start = Sv_pop_front(&sv, strlen(str));
+  return (strcmp(str, Sv_to_cstr(sv_start)) == 0);
 }
-bool Sv_ends_with(const char *str, String_view sv) {
+bool Sv_ends_with(String_view sv, const char *str) {
   if (sv.len < strlen(str))
     return false;
-
-  for (size_t i = 0; i < strlen(str); ++i) {
-    if (str[strlen(str) - i] != sv.data[sv.len - i]) {
-      return false;
-    }
-  }
-  return true;
+  assert(sv.len >= strlen(str));
+  String_view sv_end = Sv_pop_back(&sv, strlen(str));
+  return (strcmp(str, Sv_to_cstr(sv_end)) == 0);
 }
 String_view Sv_pop_front(String_view *sv, size_t size) {
   if (size > sv->len) {
