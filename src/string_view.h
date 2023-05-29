@@ -12,6 +12,8 @@ typedef struct {
 
 #define Sv_fmt "%.*s"
 #define Sv_arg(sv) (int)sv.len, sv.data
+#define SV(cstr)                                                               \
+  (String_view) { .data = cstr, .len = strlen(cstr) }
 
 String_view Sv_make(const char *cstr);
 bool Sv_starts_with(const char *str, String_view sv);
